@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH --nodes=12                  # Number of nodes
+#SBATCH --ntasks=432                # Request 100 CPU cores
+#SBATCH --time=24:00:00             # Job should run for up to 6 hours
+#SBATCH --account=hpacf  # Where to charge NREL Hours
+#SBATCH --job-name=ViscousEB
+#SBATCH --output=ViscousEB.%j.out
+srun -n 432 ./CNS_EBoft_actual3d.gnu.MPI.ex inputs # srun will infer which mpirun to use
