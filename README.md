@@ -19,7 +19,7 @@ To run a case, the prescribed motion of the EB and its velocity are to be specif
 	}
 ```
 2. Specify the velocity of the EB in `hydro/cns_eb_hyp_wall.f90`. This routine calculates the invsicid fluxes.
-   For the above vertically oscillating cylinder
+   For the above vertically oscillating cylinder the vertical velocity is `v = -2 pi f A sin(2 pi f t)`.
 ```
 	ublade = 0.0d0
 	vblade = -0.2d0*0.4d0*2.0d0*3.14159265359d0*24.375d0*1.0d0*sin(2.0d0*3.14159265359d0*24.375d0*1.0d0*time)
