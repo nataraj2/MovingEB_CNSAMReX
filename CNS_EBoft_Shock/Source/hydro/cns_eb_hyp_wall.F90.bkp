@@ -1,0 +1,84 @@
+module cns_eb_hyp_wall_module
+  use amrex_fort_module, only : rt=>amrex_real
+  use amrex_error_module, only : amrex_abort
+  implicit none
+  private
+  public :: compute_hyp_wallflux
+
+contains
+
+  subroutine compute_hyp_wallflux (divw, i,j,k, rho, u, v, w, p, &
+       axm, axp, aym, ayp, azm, azp,dx,prob_lo,time)
+    use cns_physics_module, only : gamma
+    use cns_module, only : smallp, smallr, umx, umy, umz
+    use riemann_module, only : analriem
+    integer, intent(in) :: i,j,k
+    real(rt), intent(in) :: rho, u, v, w, p, axm, axp, aym, ayp, azm, azp
+    real(rt), intent(out) :: divw(5)
+    real(rt), intent(in) :: dx(3), prob_lo(3)
+    real(rt), intent(in) :: time
+    
+    real(rt) :: apnorm, apnorminv, anrmx, anrmy, anrmz, un
+    real(rt) :: flux(1,1,1,5)
+    real(rt) :: velocity, uvel, vvel, wvel, x
+
+    apnorm = sqrt((axm-axp)**2 + (aym-ayp)**2 + (azm-azp)**2)
+
+    if (apnorm .eq. 0.d0) then
+       print *, "compute_hyp_wallflux: ", i,j,k, axm, axp, aym, ayp, azm, azp
+       flush(6)
+       call amrex_abort("compute_hyp_wallflux: we are in trouble.")
+    end if
+
+    apnorminv = 1.d0 / apnorm
+    anrmx = (axm-axp) * apnorminv  ! pointing to the wall
+    anrmy = (aym-ayp) * apnorminv
+    anrmz = (azm-azp) * apnorminv
+
+    un = u*anrmx + v*anrmy + w*anrmz
+
+    call analriem(gamma, smallp, smallr, 1, 1, 1, 1, &
+         [rho], [ un], [p], [0.d0], [0.d0], &  ! fluid
+    	 ![rho], [-2.0d0*1e-6*2.0d0*3.1415d0*1000.0d0*sin(2.0d0*3.1415d0*1000.0d0*time)-un], [p], [0.d0], [0.d0], &  ! body
+         ![rho], [2.0d0*1.0d-1-un], [p], [0.d0], [0.d0], &  ! body
+         ![rho], [2.0d0*10.0*time-un], [p], [0.d0], [0.d0], &  ! body
+         [rho], [-un], [p], [0.d0], [0.d0], &  ! body
+        flux, [1,1,1], [1,1,1], 2,3,4)
+
+    !if(abs(anrmx)-0.866d0.le.1e-2.and.abs(anrmy)-0.5d0.le.1e-2)then
+    !velocity = 0.1d0!-1.0d0*1e-6*2.0d0*3.1415d0*1000.0d0*sin(2.0d0*3.1415d0*1000.0d0*time)
+    !else
+    !velocity=0.0d0
+    !endif
+
+    x = prob_lo(1)+(i+0.5d0)*dx(1)
+    
+    !if(abs(anrmx)-1.0d0.le.1e-4.and.abs(anrmy).le.1e-4.and.abs(anrmz).le.1e-4.and.x.le.1.1d0)then
+    !velocity = 337.974d0!-1.0d0*1e-6*2.0d0*3.1415d0*1000.0d0*sin(2.0d0*3.1415d0*1000.0d0*time)
+    !else
+    !velocity=0.0d0
+    !endif
+
+   
+    uvel = 5e5*time!velocity*(-anrmx)
+    vvel = 0.0d0!velocity*(-anrmy)
+    wvel = 0.0d0!velocity*(-anrmz)
+
+    divw = 0.d0
+    divw(1)   = rho*(uvel*(axm-axp)+vvel*(aym-ayp)+wvel*(azm-azp))
+    divw(umx) = (axm-axp) * (p+rho*uvel**2)
+    divw(umy) = (aym-ayp) * p
+    divw(umz) = (azm-azp) * p
+    divw(5)   = (p+p/0.4d0+0.5d0*rho*(uvel**2+vvel**2+wvel**2))*(uvel*(axm-axp)+vvel*(aym-ayp)+wvel*(azm-azp))	
+
+    !divw = 0.d0
+    !divw(umx) = (axm-axp) * flux(1,1,1,2)
+    !divw(umy) = (aym-ayp) * flux(1,1,1,2)
+    !divw(umz) = (azm-azp) * flux(1,1,1,2)
+
+
+
+
+  end subroutine compute_hyp_wallflux
+
+end module cns_eb_hyp_wall_module
