@@ -23,7 +23,7 @@ EB does not move in accordance with the force exerted by the fluid on it.
 	vblade = -0.2d0*0.4d0*2.0d0*3.14159265359d0*24.375d0*1.0d0*sin(2.0d0*3.14159265359d0*24.375d0*1.0d0*time)
 	wblade = 0.0d0
 ``` 
-3. Specify the velocity of the EB in `diffusion/cns_eb_diff_wall.F90` as well. This routine calcuates the viscous 
+3. Specify the velocity of the EB (same as in 2) in `diffusion/cns_eb_diff_wall.F90` as well. This routine calcuates the viscous 
    fluxes.
 ```
 	ublade = 0.0d0
