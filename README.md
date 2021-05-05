@@ -35,3 +35,19 @@ To run a case, the prescribed motion of the EB and its velocity are to be specif
 4. The initial condition is specified in `Exec/cns_prob.F90`.
 5. Modify `inputs` located in `Exec/<casename>` for domain size, number of cells, refinement, viscosity, and also specify the `geom_type`
    `eb2.geom_type = moving_cylinder` for the above example.
+
+## Notes
+
+1. When there are parts of the EB which move and parts which are stationary, `if` loops are used to specify which part of the EB 
+   moves. For eg., the case of a moving piston in a stationary cylinder `CNS_EBoft_ICE`, the velocity in `hydro/cns_eb_hyp_wall.f90` is 
+```
+	if(x.le.0.075d0 .and. abs(anrmx).gt.1e-6)then
+	ublade=-0.02d0*3000.0d0/8.0d0*sin(3000.0d0/8.0d0*time)
+	vblade = 0.0d0
+	wblade = 0.0d0
+	else
+	ublade = 0.0d0
+	vblade = 0.0d0
+	wblade = 0.0d0
+	endif
+```
