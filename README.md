@@ -14,6 +14,7 @@ EB does not move in accordance with the force exerted by the fluid on it.
         auto polys = EB2::makeUnion(cf1);
         auto gshop = EB2::makeShop(polys);
         EB2::Build(gshop, geom, max_coarsening_level, max_coarsening_level, 4,false);
-    }```
+    }
+	```
 2. 
 3. `CNS_init_eb2.cpp`
