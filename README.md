@@ -6,7 +6,7 @@ EB does not move in accordance with the force exerted by the fluid on it.
 ## How to run a case 
 
 1. The prescribed motion of the EB is specified as a case in one of the `if` loops in `CNS_init_eb2.cpp`. For eg.,
-   for a vertically oscillating cylinder, create an if `geom_type` of `moving_cylinder`, and this 
+   for a vertically oscillating cylinder, create an `if` loop for a `geom_type` of `moving_cylinder`, and this 
    will be specified in the `inputs` file.
 ```
 	if(geom_type == "moving_cylinder"){
