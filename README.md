@@ -30,5 +30,5 @@ EB does not move in accordance with the force exerted by the fluid on it.
 	vblade = -0.2d0*0.4d0*2.0d0*3.14159265359d0*24.375d0*1.0d0*sin(2.0d0*3.14159265359d0*24.375d0*1.0d0*time)
 	wblade = 0.0d0
 ```
-4. Modify `inputs` for domain size, number of cells, refinement, viscosity, and also specify the `geom_type`
+4. Modify `inputs` located in `Exec/<casename>` for domain size, number of cells, refinement, viscosity, and also specify the `geom_type`
    `eb2.geom_type = moving_cylinder` for the above example.
