@@ -18,9 +18,9 @@ transversely oscillating cylinder in a crossflow.
 ## Governing equations 
 The compressible Navier-Stokes equations for moving boundaries in the finite volume formulation written in are
 
-$\frac{\partial\rho}{\partial t} = -\frac{1}{\alpha(t) V}\int\limits_{\partial\Omega(t)}\rho\bm{u}\cdot\bm{n} \,dA$
-$\frac{\partial\rho\bm{u}}{\partial t} = \frac{1}{\alpha(t) V}\Bigg[-\int\limits_{\partial\Omega(t)} (p\bm{n} + \rho\bm{u} (\bm{u}\cdot\bm{n}))\,dA + \int\limits_{\partial\Omega(t)} \bm{\tau}\cdot\bm{n}\,dA\Bigg],\label{eqn:momentum}$
-$\frac{\partial\rho E}{\partial t} = \frac{1}{\alpha(t) V}\Bigg[-\int\limits_{\partial\Omega(t)} (p+\rho E) \bm{u}\cdot\bm{n}\, dA + \int\limits_{\partial\Omega(t)} \Bigg(\bm{u}\cdot\bm{\tau}\cdot\bm{n} + k\nabla T\cdot \bm{n}\Bigg)\, dA\Bigg]$
+$\frac{\partial\rho}{\partial t} = -\frac{1}{\alpha(t) V}\int\limits_{\partial\Omega(t)}\rho\mathbf{u}\cdot\mathbf{n} \,dA$
+$\frac{\partial\rho\mathbf{u}}{\partial t} = \frac{1}{\alpha(t) V}\Bigg[-\int\limits_{\partial\Omega(t)} (p\mathbf{n} + \rho\mathbf{u} (\mathbf{u}\cdot\mathbf{n}))\,dA + \int\limits_{\partial\Omega(t)} \mathbf{\tau}\cdot\mathbf{n}\,dA\Bigg],\label{eqn:momentum}$
+$\frac{\partial\rho E}{\partial t} = \frac{1}{\alpha(t) V}\Bigg[-\int\limits_{\partial\Omega(t)} (p+\rho E) \mathbf{u}\cdot\mathbf{n}\, dA + \int\limits_{\partial\Omega(t)} \Bigg(\mathbf{u}\cdot\mathbf{\tau}\cdot\mathbf{n} + k\nabla T\cdot \mathbf{n}\Bigg)\, dA\Bigg]$
 
 ## How to run a case 
 
