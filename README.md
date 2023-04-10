@@ -1,6 +1,6 @@
 # Moving body simulations in compressible flow 
 This repository contains the code for the implementation of a moving embedded boundary algorithm for 
-compressible flow in the CNS code in AMReX. Currently only prescribed motion can be done. 
+compressible flows within the compressible Navier-Stokes (CNS) framework in AMReX. Currently only prescribed motion can be done. 
 i.e. the simulations are not two-way coupled - the EB does not move in accordance with the force exerted 
 by the fluid on it. 
 
