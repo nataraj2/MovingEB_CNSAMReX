@@ -22,7 +22,7 @@ $\frac{\partial\rho}{\partial t} = -\frac{1}{\alpha(t) V}\int\limits_{\partial\O
 $\frac{\partial\rho\mathbf{u}}{\partial t} = \frac{1}{\alpha(t) V}\Bigg[-\int\limits_{\partial\Omega(t)} (p\mathbf{n} + \rho\mathbf{u} (\mathbf{u}\cdot\mathbf{n}))\,dA + \int\limits_{\partial\Omega(t)} \mathbf{\tau}\cdot\mathbf{n}\ dA\Bigg]$  
 $\frac{\partial\rho E}{\partial t} = \frac{1}{\alpha(t) V}\Bigg[-\int\limits_{\partial\Omega(t)} (p+\rho E) \mathbf{u}\cdot\mathbf{n}\, dA + \int\limits_{\partial\Omega(t)} \Bigg(\mathbf{u}\cdot\mathbf{\tau}\cdot\mathbf{n} + k\nabla T\cdot \mathbf{n}\Bigg)\ dA\Bigg]$  
 where the conservative variables $(\rho,\rho\mathbf{u},\rho E)$ are cell-averaged, $\partial\Omega(t)$ is the temporally varying surface of the control volume, $\mathbf{u}$ is the velocity of
-the fluid on the control surface, $p$ is the pressure, $\mathbf{n}$ is the outward unit normal to the control surface, $ V=\Delta x\Delta y\Delta z$ is the cell volume, $\alpha(t)$ is
+the fluid on the control surface, $p$ is the pressure, $\mathbf{n}$ is the outward unit normal to the control surface, $V=\Delta x\Delta y\Delta z$ is the cell volume, $\alpha(t)$ is
 the time-varying volume fraction of the fluid in the cell, $\tau$ is the viscous stress tensor, $k$ is the thermal conductivity of the fluid, $T$ is the temperature,
 and $A$ denotes the surface of the control volume.
 
