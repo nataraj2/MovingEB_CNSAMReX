@@ -1,7 +1,18 @@
 # MovingEB_CNSAMReX
-Implementation of moving embedded boundary algorithm for compressible flow in the CNS code in AMReX.
-Currently only prescribed motion can be done. i.e. the simulations are not two-way coupled - the 
-EB does not move in accordance with the force exerted by the fluid on it. 
+This repository contains the code for the implementation of a moving embedded boundary algorithm for 
+compressible flow in the CNS code in AMReX. Currently only prescribed motion can be done. 
+i.e. the simulations are not two-way coupled - the EB does not move in accordance with the force exerted 
+by the fluid on it. 
+
+## Simulations 
+
+<img src="Images/ShockCylinderInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true"><img src="Images/ShockWedge.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true">  
+
+<img src="Images/TransonicBuffet.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true"><img src="Images/ShockCOneInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true">  
+
+<img src="Images/ClosedSystem.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true"><img src="Images/TransverseOscillatingCylinder.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true">
+
+
 
 ## How to run a case 
 
