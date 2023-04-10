@@ -4,7 +4,10 @@ compressible flows within the compressible Navier-Stokes (CNS) framework in AMRe
 i.e. the simulations are not two-way coupled - the EB does not move in accordance with the force exerted 
 by the fluid on it. 
 
-## Simulations 
+## Simulations  
+Simulations are performed for a variety of inviscid and viscous test cases. Some of the simulations are shown below - shock-cylinder interaction, 
+shock-wedge interaction, transonic buffet over a NACA0012 airfoil, shock-cone interaction, cylinder-oscillating piston system, and 
+transversely oscillating cylinder in a crossflow.
 
 <img src="Images/ShockCylinderInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true"><img src="Images/ShockWedgeInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true">  
 
