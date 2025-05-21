@@ -15,7 +15,7 @@ transversely oscillating cylinder in a crossflow.
 
 <img src="Images/ClosedSystem.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true"><img src="Images/TransverseOscillatingCylinder.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true">
 
-<img src="Images/AMReXLogo.gif?raw=true&v=100" alt="your_alternative_text" width="75%" height="75%" loop="true" autoplay="true">
+<img src="Images/AMReXLogo.gif?raw=true&v=100" alt="your_alternative_text" width="100%" height="100%" loop="true" autoplay="true">
 
 
 ## Governing equations 
