@@ -9,17 +9,29 @@
 
 using namespace amrex;
 
-void shift_points(Vector<RealArray>& point, Real shift)
+void shift_points(Vector<RealArray>& point, 
+				  Real shift, 
+				  Vector<Real> timevec,
+				  Real time,
+				  Real yshift, 
+				  const int letter_idx)
 {
-	for(int i=0;i<point.size(); i++){
-		RealArray& tmp_point = point[i];
-		tmp_point[1] = tmp_point[1] - shift;
-	}
+	if(time >= timevec[letter_idx] and time <= timevec[letter_idx+1]) {		
+		for(int i=0;i<point.size(); i++) {
+			RealArray& tmp_point = point[i];
+			//tmp_point[1] = tmp_point[1] - shift;
+		}
+	} else if(time < timevec[letter_idx]) {
+		for(int i=0;i<point.size(); i++) {
+            RealArray& tmp_point = point[i];
+            //tmp_point[1] = tmp_point[1] - yshift;
+        }
+	} 
 }
 
 void clear_variables(Vector<RealArray>& point,
-					 Vector<RealArray>& normal,
-					 Vector<EB2::PlaneIF>& planes) 
+			 Vector<RealArray>& normal,
+			 Vector<EB2::PlaneIF>& planes) 
 {
 	point.clear();
 	point.shrink_to_fit();
@@ -30,36 +42,36 @@ void clear_variables(Vector<RealArray>& point,
 }
 
 void read_planes_from_file(const std::string filename,
-						   Vector<RealArray>& point,
-						   Vector<RealArray>& normal)
+			   Vector<RealArray>& point,
+			   Vector<RealArray>& normal)
 {
 	std::ifstream file(filename);  // Open the file
     if (!file) {
     	std::cerr << "Error opening file!" << std::endl;
-		exit(1);
+	exit(1);
     }
 
     Real a, b, c, d;
-		
+	
 	RealArray tmp_point, tmp_normal;
 
     while (file >> a >> b >> c >> d) {  // Read 4 values per row
-		tmp_point[0] = 0.0;
-		tmp_point[1] = b;
-		tmp_point[2] = a;
-		tmp_normal[0] = 0.0;
-		tmp_normal[1] = d;
-		tmp_normal[2] = c;
-			
-		point.emplace_back(tmp_point);
-		normal.emplace_back(tmp_normal);
+	tmp_point[0] = 0.0;
+	tmp_point[1] = b;
+	tmp_point[2] = a;
+	tmp_normal[0] = 0.0;
+	tmp_normal[1] = d;
+	tmp_normal[2] = c;
+		
+	point.emplace_back(tmp_point);
+	normal.emplace_back(tmp_normal);
     }
     file.close();  // Close the file
 }
 
 void
 initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
-                const int max_coarsening_level,Real time)
+                const int max_coarsening_level, Real time, const int nstep )
 {
     BL_PROFILE("initializeEB2");
 
@@ -590,20 +602,29 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
 		Vector<RealArray> point, normal;
 		Vector<EB2::PlaneIF> planes;
 
+		Vector<Real> timevec;
+		timevec.resize(6);
+		timevec[0] = 0.000;
+		timevec[1] = timevec[0] + 813*5e-5;  
+		timevec[2] = timevec[1] ;//+ 818*5e-5;  
+		timevec[3] = timevec[2] ;//+ 794*5e-5;  
+		timevec[4] = timevec[3] ;//+ 794*5e-5;  
+		timevec[5] = timevec[4] ;//+ 794*5e-5;  
+
 		// A
 		Real yshift = 3.38;
 		Real vel = 83.1;
 	
 		read_planes_from_file("A1.txt", point, normal);
-		shift_points(point,yshift-vel*time);
+		shift_points(point,yshift-vel*(time-timevec[0]), timevec, time, yshift, 0);
 		for (int i = 0; i < point.size(); ++i) {
- 		   planes.emplace_back(point[i], normal[i]);  // Create and store PlaneIF objects
+ 	   		planes.emplace_back(point[i], normal[i]);  // Create and store PlaneIF objects
 		}
 		auto polys1 = EB2::makeIntersection(planes[0],planes[1],planes[2],planes[3]);
 		clear_variables(point, normal, planes);
-			
+		
 		read_planes_from_file("A2.txt", point, normal);
-		shift_points(point,yshift-vel*time);
+		shift_points(point,yshift-vel*(time-timevec[0]), timevec, time, yshift, 0);
 		for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
@@ -611,48 +632,55 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
 		clear_variables(point, normal, planes);
 
 		read_planes_from_file("A3.txt", point, normal);
-		shift_points(point,yshift-vel*time);
+		shift_points(point,yshift-vel*(time-timevec[0]), timevec, time, yshift, 0);
 		for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
-		auto polys3 = EB2::makeIntersection(planes[0],planes[1],planes[2]);
+		auto polys3 = EB2::makeIntersection(planes[0],planes[1],planes[2], planes[3]);
 		clear_variables(point, normal, planes);
 
 		auto tmp1 = EB2::makeDifference(polys1, polys2);
-		auto A_final = EB2::makeDifference(tmp1, polys3);
+		auto A_final_1 = EB2::makeDifference(tmp1, polys3);
+		Real val = 0.0;
+		//if(nstep==299 or nstep==3300 or nstep==3628){ // for A=0.5 
+		if(nstep==308 or nstep==371 or nstep ==947){
+			//val = 1e-3;
+		}
+		auto A_final = EB2::translate(A_final_1,{0.0,val,val});
+		
 		//auto A_final = EB2::makeDifference(polys1, polys2);
 
 		// M
 		read_planes_from_file("M1.txt", point, normal);
-		shift_points(point,-3.4+vel*time);
+		shift_points(point,-3.4+vel*(time-timevec[1]), timevec, time, -3.4, 1);
 		for (int i = 0; i < point.size(); ++i) {
- 		   planes.emplace_back(point[i], normal[i]);  // Create and store PlaneIF objects
+ 	   		planes.emplace_back(point[i], normal[i]);  // Create and store PlaneIF objects
 		}
 		auto polys5 = EB2::makeIntersection(planes[0],planes[1],planes[2],planes[3]);
 		clear_variables(point, normal, planes);
-			
+		
 		read_planes_from_file("M2.txt", point, normal);
-		shift_points(point,-3.4+vel*time);
+		shift_points(point,-3.4+vel*(time-timevec[1]), timevec, time, -3.4, 1);
 		for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
-		auto polys6 = EB2::makeIntersection(planes[0],planes[1],planes[2]);
+		auto polys6 = EB2::makeIntersection(planes[0],planes[1],planes[2],planes[3]);
 		clear_variables(point, normal, planes);
 
 		read_planes_from_file("M3.txt", point, normal);
-		shift_points(point,-3.4+vel*time);
+		shift_points(point,-3.4+vel*(time-timevec[1]), timevec, time, -3.4, 1);
 		for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
-		auto polys7 = EB2::makeIntersection(planes[0],planes[1],planes[2]);
+		auto polys7 = EB2::makeIntersection(planes[0],planes[1],planes[2],planes[3]);
 		clear_variables(point, normal, planes);
 
 		read_planes_from_file("M4.txt", point, normal);
-		shift_points(point,-3.4+vel*time);
+		shift_points(point,-3.4+vel*(time-timevec[1]), timevec, time, -3.4, 1);
 		for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
-		auto polys8 = EB2::makeIntersection(planes[0],planes[1],planes[2]);
+		auto polys8 = EB2::makeIntersection(planes[0],planes[1],planes[2],planes[3]);
 		clear_variables(point, normal, planes);
 
 		auto tmp2 = EB2::makeDifference(polys5, polys6);
@@ -662,17 +690,17 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
 		// R
 		yshift = 3.3;
 		read_planes_from_file("R1.txt", point, normal);
-		shift_points(point,yshift-vel*time);
+		shift_points(point,yshift-vel*(time-timevec[2]), timevec, time, yshift, 2);
 		for (int i = 0; i < point.size(); ++i) {
- 		   planes.emplace_back(point[i], normal[i]);  // Create and store PlaneIF objects
+ 	   		planes.emplace_back(point[i], normal[i]);  // Create and store PlaneIF objects
 		}
 		auto polys9 = EB2::makeIntersection(planes[0],planes[1],planes[2],planes[3],
 											planes[4],planes[5],planes[6],planes[7],
 											planes[8],planes[9],planes[10]);
 		clear_variables(point, normal, planes);
-			
+		
 		read_planes_from_file("R2.txt", point, normal);
-		shift_points(point,yshift-vel*time);
+		shift_points(point,yshift-vel*(time-timevec[2]), timevec, time, yshift, 2);
 		for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
@@ -681,7 +709,7 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
 		clear_variables(point, normal, planes);
 
 		read_planes_from_file("R3.txt", point, normal);
-		shift_points(point,yshift-vel*time);
+		shift_points(point,yshift-vel*(time-timevec[2]), timevec, time, yshift, 2);
 		for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
@@ -690,7 +718,7 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
 		clear_variables(point, normal, planes);
 
 		read_planes_from_file("R4.txt", point, normal);
-		shift_points(point,yshift-vel*time);
+		shift_points(point,yshift-vel*(time-timevec[2]), timevec, time, yshift, 2);
 		for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
@@ -698,11 +726,18 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
                                             planes[4],planes[5],planes[6],planes[7]);
 		clear_variables(point, normal, planes);
 
-		//auto tmp4 = EB2::makeDifference(polys9, polys10);
+	//auto tmp4 = EB2::makeDifference(polys9, polys10);
 
 		auto polys_union = EB2::makeUnion(polys9,polys10); 
 		auto diff1 = EB2::makeDifference(polys_union, polys11);
-		auto R_final = EB2::makeDifference(diff1, polys12);
+		auto R_final_1 = EB2::makeDifference(diff1, polys12);
+		val = 0.0;
+	
+		if(nstep == 697){	
+			//val = 1e-3;
+		}
+			auto R_final = EB2::translate(R_final_1,{0.0,val,val});
+		
 
 		// e
 
@@ -710,7 +745,7 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
 		vel = 83.1;
 
 		read_planes_from_file("E1.txt", point, normal);
-        shift_points(point,-yshift+vel*time);
+        shift_points(point,-yshift+vel*(time-timevec[3]), timevec, time, -yshift, 3);
         for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i], normal[i]);  // Create and store PlaneIF objects
         }
@@ -723,7 +758,7 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
         clear_variables(point, normal, planes);
 
         read_planes_from_file("E2.txt", point, normal);
-        shift_points(point,-yshift+vel*time);
+        shift_points(point,-yshift+vel*(time-timevec[3]), timevec, time, -yshift, 3);
         for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
@@ -732,7 +767,7 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
         clear_variables(point, normal, planes);
 
         read_planes_from_file("E3.txt", point, normal);
-        shift_points(point,-yshift+vel*time);
+        shift_points(point,-yshift+vel*(time-timevec[3]), timevec, time, -yshift, 3);
         for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
@@ -741,7 +776,7 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
         clear_variables(point, normal, planes);
 
         read_planes_from_file("E4.txt", point, normal);
-        shift_points(point,-yshift+vel*time);
+        shift_points(point,-yshift+vel*(time-timevec[3]), timevec, time, -yshift, 3);
         for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
@@ -758,7 +793,7 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
 		vel = 83.1;
 
 		read_planes_from_file("X1.txt", point, normal);
-        shift_points(point,yshift-vel*time);
+        shift_points(point,yshift-vel*(time-timevec[4]), timevec, time, yshift, 4);
         for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i], normal[i]);  // Create and store PlaneIF objects
         }
@@ -766,14 +801,19 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
         clear_variables(point, normal, planes);
 
         read_planes_from_file("X2.txt", point, normal);
-        shift_points(point,yshift-vel*time);
+        shift_points(point,yshift-vel*(time-timevec[4]), timevec, time, yshift, 4);
         for (int i = 0; i < point.size(); ++i) {
            planes.emplace_back(point[i],normal[i]);  // Create and store PlaneIF objects
         }
         auto polys18 = EB2::makeIntersection(planes[0],planes[1],planes[2],planes[3]);
         clear_variables(point, normal, planes);
 
-		auto X_final = EB2::makeUnion(polys17,polys18);
+		auto X_final_1 = EB2::makeUnion(polys17,polys18);
+		val = 0.0;
+		if(nstep ==869 or nstep == 2149 or nstep==4661){
+			//val = 1e-3;
+		}
+		auto X_final = EB2::translate(X_final_1,{0.0,val,val});
 
      	//auto gshop = EB2::makeShop(A_final);
      	//auto gshop = EB2::makeShop(M_final);
@@ -781,33 +821,36 @@ initialize_EB2 (const Geometry& geom, const int required_coarsening_level,
      	//auto gshop = EB2::makeShop(E_final);
      	//auto gshop = EB2::makeShop(X_final);
 
-		//auto AMReX_final = EB2::makeUnion(A_final, R_final, X_final);
-		auto AMReX_final = EB2::makeUnion(M_final, E_final);
-     	//auto gshop = EB2::makeShop(AMReX_final);
+		//auto AMReX_final = EB2::makeUnion(M_final);
+		auto AMReX_final = EB2::makeUnion(A_final, M_final, R_final, E_final, X_final);
+		Real freq;
+		ppeb2.get("freq", freq);	
+		auto AMReX_final_translate = EB2::translate(AMReX_final,{0.0,0.5*cos(2.0*3.14159265359*freq*time),0.0});
 
-		EB2::CylinderIF cf1(0.5, 10.0, 0, {0.0,2.0+0.5*0.2*cos(2.0*3.14159265359*24.375*time),-2.5}, false);
-        auto polys = EB2::makeUnion(cf1);
-        auto gshop = EB2::makeShop(polys);
+     	auto gshop = EB2::makeShop(AMReX_final_translate);
 
-        EB2::Build(gshop, geom, max_coarsening_level, max_coarsening_level, 4, false);		
+		//EB2::CylinderIF cf1(0.5, 10.0, 0, {0.0,2.0+0.5*0.2*cos(2.0*3.14159265359*24.375*time),-2.5}, false);
+        //auto polys = EB2::makeUnion(cf1);
+        //auto gshop = EB2::makeShop(polys);
 
+        EB2::Build(gshop, geom, max_coarsening_level, max_coarsening_level, 4, false);	
 	}
 
 	else if(geom_type == "dummy_eb"){
-		RealArray point, normal;
+	RealArray point, normal;
 
-		point[0] = 100000.0;
-		point[1] = 0.0;
-		point[2] = 0.0;
+	point[0] = 100000.0;
+	point[1] = 0.0;
+	point[2] = 0.0;
+	
+	normal[0] = 1.0;
+	normal[0] = 0.0;
+	normal[0] = 0.0;
+
+	EB2::PlaneIF plane(point, normal);
 		
-		normal[0] = 1.0;
-		normal[0] = 0.0;
-		normal[0] = 0.0;
-
-		EB2::PlaneIF plane(point, normal);
-			
-		auto gshop = EB2::makeShop(plane);
-        EB2::Build(gshop, geom, max_coarsening_level, max_coarsening_level, 4, false);		
+	auto gshop = EB2::makeShop(plane);
+        EB2::Build(gshop, geom, max_coarsening_level, max_coarsening_level, 4, false);	
 	
 	}
     else

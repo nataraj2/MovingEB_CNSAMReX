@@ -67,7 +67,7 @@ contains
     apnorm = sqrt(dapx**2+dapy**2+dapz**2)
 
     if (apnorm .eq. 0.d0) then
-       call amrex_abort("compute_diff_wallflux: we are in trouble.")
+       !call amrex_abort("compute_diff_wallflux: we are in trouble.")
     end if
 
     apnorminv = 1.d0/apnorm
@@ -224,7 +224,7 @@ contains
 
     ublade = 0.0d0
     !vblade = -83.1d0
-	vblade =  -0.5d0*0.2d0*2.0d0*3.14159265359d0*24.375d0*sin(2.0d0*3.14159265359d0*24.375d0*time)
+	vblade =  -0.5d0*2.0d0*3.14159265359d0*30.0d0*sin(2.0d0*3.14159265359d0*30.00d0*time)
     wblade = 0.0d0
     
     uvel = ublade!u - un*anrmx + uwalldotn*anrmx
@@ -270,16 +270,16 @@ contains
     y = -5.0d0 + (j+0.5d0)/dxinv(1)
     z =  0.0d0 + (k+0.5d0)/dxinv(1)
 
-    call MPI_Comm_Rank(MPI_COMM_WORLD, myrank, ierr)
+    !call MPI_Comm_Rank(MPI_COMM_WORLD, myrank, ierr)
 
-    WRITE(filename1,'(a,i4.4,a)') "skin_friction.",myrank,".txt"
-    if(abs(time-0.205128d0).le.1e-5)then
-    open(unit=10,file=filename1,position='append')
-    if(abs(x-1.0d0/(dxinv(1)*2.0d0)).le.1e-5.and.level .eq. 3 .and. RKstep .eq. 2)then
-        write(10,*)y,z,tauyy*dxinv(1),tauyz*dxinv(1),tauzz*dxinv(1), anrmy, anrmz
-    endif
-    close(10)
-    endif
+    !WRITE(filename1,'(a,i4.4,a)') "skin_friction.",myrank,".txt"
+    !if(abs(time-0.205128d0).le.1e-5)then
+    !open(unit=10,file=filename1,position='append')
+    !if(abs(x-1.0d0/(dxinv(1)*2.0d0)).le.1e-5.and.level .eq. 3 .and. RKstep .eq. 2)then
+     !   write(10,*)y,z,tauyy*dxinv(1),tauyz*dxinv(1),tauzz*dxinv(1), anrmy, anrmz
+    !endif
+    !close(10)
+    !endif
 
 
     ! dx == dy == dz

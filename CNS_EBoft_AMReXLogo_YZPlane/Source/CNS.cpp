@@ -344,7 +344,8 @@ CNS::errorEst (TagBoxArray& tags, int, int, Real time, int, int)
     if (level < refine_max_dengrad_lev)
     {
         int ng = 1;
-        const auto& rho = derive("density", time, ng);
+        const auto& yvel = derive("y_velocity", time, ng);
+        const auto& zvel = derive("z_velocity", time, ng);
         const MultiFab& S_new = get_new_data(State_Type);
 
         const char   tagval = TagBox::SET;
@@ -357,7 +358,7 @@ CNS::errorEst (TagBoxArray& tags, int, int, Real time, int, int)
 #ifdef _OPENMP
 #pragma omp parallel
 #endif
-        for (MFIter mfi(*rho,true); mfi.isValid(); ++mfi)
+        for (MFIter mfi(*yvel,true); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
 
@@ -369,7 +370,8 @@ CNS::errorEst (TagBoxArray& tags, int, int, Real time, int, int)
             {
                 cns_tag_denerror(BL_TO_FORTRAN_BOX(bx),
                                  BL_TO_FORTRAN_ANYD(tags[mfi]),
-                                 BL_TO_FORTRAN_ANYD((*rho)[mfi]),
+                                 BL_TO_FORTRAN_ANYD((*yvel)[mfi]),
+                                 BL_TO_FORTRAN_ANYD((*zvel)[mfi]),
                                  BL_TO_FORTRAN_ANYD(flag),
                                  &refine_dengrad, &tagval, &clearval, dx, &time);
             }

@@ -9,7 +9,7 @@
 
 using namespace amrex;
 
-void initialize_EB2 (const Geometry& geom, const int required_level, const int max_level, Real time);
+void initialize_EB2 (const Geometry& geom, const int required_level, const int max_level, Real time, const int nstep);
 void finalize_EB2();
 
 int main (int argc, char* argv[])
@@ -54,7 +54,7 @@ int main (int argc, char* argv[])
         AmrLevel::SetEBSupportLevel(EBSupport::full);
         AmrLevel::SetEBMaxGrowCells(CNS::numGrow(),4,2);
 
-        initialize_EB2(amr.Geom(amr.maxLevel()), amr.maxLevel(), amr.maxLevel(),0.0);
+        initialize_EB2(amr.Geom(amr.maxLevel()), amr.maxLevel(), amr.maxLevel(),0.0, 0);
 
 	//std::cout << amr.levelSteps(0) << "\n";
             
@@ -70,7 +70,7 @@ int main (int argc, char* argv[])
 	    
 	{
 	//GlobalTest();
-        initialize_EB2(amr.Geom(amr.maxLevel()), amr.maxLevel(), amr.maxLevel(),amr.cumTime());
+        initialize_EB2(amr.Geom(amr.maxLevel()), amr.maxLevel(), amr.maxLevel(),amr.cumTime(), amr.levelSteps(0));
 	    //
 	    // Do a coarse timestep.  Recursively calls timeStep()
 	    //

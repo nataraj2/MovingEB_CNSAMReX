@@ -1,4 +1,4 @@
-max_step  = 12800
+max_step  = 9600
 stop_time = 100.0
 
 geometry.is_periodic = 0 0 0
@@ -15,8 +15,8 @@ amr.n_cell           =   8 64 128
 # 1 = Inflow             4 = SlipWall
 # 2 = Outflow            5 = NoSlipWall
 # >>>>>>>>>>>>>  BC FLAGS <<<<<<<<<<<<<<<<
-cns.lo_bc       =  2   2   1
-cns.hi_bc       =  2   2   2
+cns.lo_bc       =  2   4   1
+cns.hi_bc       =  2   4   2
 
 cns.cfl = 0.9 # cfl number for hyperbolic system
 
@@ -29,7 +29,7 @@ amr.loadbalance_level0_int = 1000
 
 # REFINEMENT / REGRIDDING 
 amr.check_input     = 0       # 
-amr.max_level       = 2       # maximum level number allowed
+amr.max_level       = 3       # maximum level number allowed
 amr.ref_ratio       = 2 2 2 2 # refinement ratio
 amr.regrid_int      = 1 1 1 1 # how often to regrid
 amr.blocking_factor = 8
@@ -54,12 +54,13 @@ amr.derive_plot_vars  = pressure x_velocity y_velocity z_velocity vorticity
 
 # EB
 eb2.geom_type = AMReXLogo
+eb2.freq = 30.00
 
 physics.gamma  = 1.4
 physics.eos_mu = 28.97
 
 physics.use_const_visc = 1
-physics.const_visc_mu = 0.27
+physics.const_visc_mu = 0.135
 physics.const_visc_ki = 0.0
 physics.const_lambda  = 0.0
 #1.7e3 

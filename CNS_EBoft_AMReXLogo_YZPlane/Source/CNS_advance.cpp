@@ -94,6 +94,8 @@ CNS::advance (Real time, Real dt, int iteration, int ncycle)
     }
 
     MultiFab::Copy(S_new,*volfrac,0,7,1,4);
+	S_new.setVal(0.0, 1, 1, 0);
+	S_old.setVal(0.0, 1, 1, 0);
     
     return dt;
 }

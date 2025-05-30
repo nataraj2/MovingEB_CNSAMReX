@@ -123,7 +123,8 @@ extern "C" {
 
     void cns_tag_denerror (const int* lo, const int* hi,
                            char* tag, const int* tlo, const int* thi,
-                           amrex_real* rho, const int* rlo, const int* rhi,
+                           amrex_real* yvel, const int* yvel_lo, const int* yvel_hi,
+                           amrex_real* zvel, const int* zvel_lo, const int* zvel_hi,
                            const void* flag, const int* flo, const int* fhi,
                            const amrex_real* dengrad, const char* tagval, const char* clearval, const amrex_real* dx, const amrex_real* time);
 

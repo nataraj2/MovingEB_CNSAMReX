@@ -69,19 +69,19 @@ subroutine cns_initdata(level, time, lo, hi, q, qlo, qhi, dx, prob_lo) bind(C, n
   integer :: i,j,k
   real(rt) :: x, y, z, p_l, p_r, rho_l, rho_r, u_l, u_r, rho, w, p 
    
-	rho = 1.226;
-	p = 101325.0;
-	
-	do k = lo(3)-2, hi(3)+2
-		z = prob_lo(2) + (k+0.5)*dx(2)/2**level
-     	do j = lo(2)-2, hi(2)+2
- 	       do i = lo(1)-2, hi(1)+2
-	 
- 			!if(z .lt. -1.0d0) then
-			!	q(i,j,k,:) = inflow_state
-			!else
-				q(i,j,k,:) = interior_state	
-			!endif
+    rho = 1.226;
+    p = 101325.0;
+    
+    do k = lo(3)-2, hi(3)+2
+        z = prob_lo(3) + (k+0.5)*dx(3)
+         do j = lo(2)-2, hi(2)+2
+            do i = lo(1)-2, hi(1)+2
+     
+            if(z .lt. -1.0d0) then
+                q(i,j,k,:) = inflow_state
+            else
+                q(i,j,k,:) = interior_state    
+            endif
 
         end do
      end do

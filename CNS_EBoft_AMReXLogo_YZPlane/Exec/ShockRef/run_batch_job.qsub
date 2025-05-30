@@ -1,0 +1,20 @@
+#!/bin/bash
+#!/bin/bash
+
+## specify your allocation (with the _g) and that you want GPU nodes
+#SBATCH -A m4749
+#SBATCH -C cpu
+#SBATCH -q regular
+
+#SBATCH -J AMReXLogo
+#SBATCH -o nyx_dm.out
+#SBATCH -e nyx_dm_error.out
+
+## set the max walltime and memory
+#SBATCH -t 24:00:00
+#SBATCH --mem=0
+
+## specify the number of nodes you want
+#SBATCH -N 2
+#SBATCH --exclusive
+srun -n 256 CNS_EBoft_actual3d.gnu.x86-milan.MPI.ex inputs
