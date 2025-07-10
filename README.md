@@ -9,11 +9,11 @@ Simulations are performed for a variety of inviscid and viscous test cases. Some
 shock-wedge interaction, transonic buffet over a NACA0012 airfoil, shock-cone interaction, cylinder-oscillating piston system, and 
 transversely oscillating cylinder in a crossflow.
 
-<img src="Images/ShockCylinderInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true"><img src="Images/ShockWedgeInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true">  
+<img src="Images/ShockCylinderInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true"><img src="Images/ShockWedgeInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true">  
 
-<img src="Images/TransonicBuffet.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true"><img src="Images/ShockConeInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true">  
+<img src="Images/TransonicBuffet.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true"><img src="Images/ShockConeInteraction.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true">  
 
-<img src="Images/ClosedSystem.gif?raw=true&v=100" alt="your_alternative_text" width="50%" height="50%" loop="true" autoplay="true"><img src="Images/TransverseOscillatingCylinder.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true">
+<img src="Images/ClosedSystem.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true"><img src="Images/TransverseOscillatingCylinder.gif?raw=true&v=100" alt="your_alternative_text" width="50%" loop="true" autoplay="true">
 
 <img src="Images/AMReXLogo.gif?raw=true&v=100" alt="your_alternative_text" width="100%" loop="true" autoplay="true">
 
