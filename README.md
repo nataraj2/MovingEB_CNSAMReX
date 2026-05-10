@@ -78,3 +78,29 @@ To run a case, the prescribed motion of the EB and its velocity are to be specif
 	wblade = 0.0d0
 	endif
 ```
+
+## Publication
+
+This work is associated with the following publication:
+
+[A moving embedded boundary approach for compressible Navier–Stokes (Journal of Computational Physics)](https://www.sciencedirect.com/science/article/abs/pii/S0021999122003771?utm_source=chatgpt.com)
+
+**Title:** A moving embedded boundary approach for the compressible Navier-Stokes equations in a block-structured adaptive refinement framework  
+**Journal:** Journal of Computational Physics (Elsevier)  
+**Volume:** 465  
+**Pages:** 111315  
+**Year:** 2022  
+
+### BibTeX
+
+```bibtex
+@article{natarajan2022moving,
+  title={A moving embedded boundary approach for the compressible Navier-Stokes equations in a block-structured adaptive refinement framework},
+  author={Natarajan, Mahesh and Grout, Ray and Zhang, Weiqun and Day, Marc},
+  journal={Journal of Computational Physics},
+  volume={465},
+  pages={111315},
+  year={2022},
+  publisher={Elsevier}
+}
+```
